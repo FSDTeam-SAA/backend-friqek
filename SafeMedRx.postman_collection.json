@@ -1,0 +1,323 @@
+{
+  "info": {
+    "name": "SafeMed Rx API",
+    "description": "Backend API collection for SafeMed Rx (patient, caregiver, admin).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api/v1" },
+    { "key": "accessToken", "value": "" },
+    { "key": "medicationId", "value": "" },
+    { "key": "doseId", "value": "" },
+    { "key": "caregiverLinkId", "value": "" },
+    { "key": "interactionId", "value": "" },
+    { "key": "notificationId", "value": "" },
+    { "key": "userId", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Madiha Aroa\",\n  \"email\": \"madiha@example.com\",\n  \"password\": \"Passw0rd!\",\n  \"confirmPassword\": \"Passw0rd!\",\n  \"phoneNumber\": \"+14155550182\",\n  \"role\": \"patient\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Verify Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"madiha@example.com\",\n  \"otp\": \"123456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/verify-email", "host": ["{{baseUrl}}"], "path": ["auth", "verify-email"] }
+          }
+        },
+        {
+          "name": "Resend OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"madiha@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/resend-otp", "host": ["{{baseUrl}}"], "path": ["auth", "resend-otp"] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"madiha@example.com\",\n  \"password\": \"Passw0rd!\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Forget Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"madiha@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/forget-password", "host": ["{{baseUrl}}"], "path": ["auth", "forget-password"] }
+          }
+        },
+        {
+          "name": "Verify Reset OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"madiha@example.com\",\n  \"otp\": \"123456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/verify-reset-otp", "host": ["{{baseUrl}}"], "path": ["auth", "verify-reset-otp"] }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"madiha@example.com\",\n  \"otp\": \"123456\",\n  \"password\": \"NewPass1!\",\n  \"confirmPassword\": \"NewPass1!\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/reset-password", "host": ["{{baseUrl}}"], "path": ["auth", "reset-password"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User / Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/user/profile", "host": ["{{baseUrl}}"], "path": ["user", "profile"] } }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Madiha Aroa\",\n  \"age\": 24,\n  \"gender\": \"Female\",\n  \"medicalConditions\": [\"Type 2 Diabetes\", \"Hypertension\", \"High Cholesterol\"],\n  \"allergies\": [\"Penicillin\", \"Sulfa drugs\"],\n  \"emergencyContactName\": \"Sarah Chen\",\n  \"emergencyContactRelation\": \"Daughter\",\n  \"emergencyContactPhone\": \"+14155550193\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/user/profile", "host": ["{{baseUrl}}"], "path": ["user", "profile"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"Passw0rd!\",\n  \"newPassword\": \"NewPass1!\",\n  \"confirmPassword\": \"NewPass1!\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/change-password", "host": ["{{baseUrl}}"], "path": ["user", "change-password"] }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/user/delete-account", "host": ["{{baseUrl}}"], "path": ["user", "delete-account"] } }
+        }
+      ]
+    },
+    {
+      "name": "Medications (Patient)",
+      "item": [
+        {
+          "name": "Get My Medications",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/medication?search=", "host": ["{{baseUrl}}"], "path": ["medication"], "query": [{ "key": "search", "value": "" }] } }
+        },
+        {
+          "name": "Get Medication By Id",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/medication/{{medicationId}}", "host": ["{{baseUrl}}"], "path": ["medication", "{{medicationId}}"] } }
+        },
+        {
+          "name": "Add Medication",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Metformin\",\n  \"dosage\": \"500mg\",\n  \"frequency\": \"Twice a day\",\n  \"times\": [\"08:00\", \"20:00\"],\n  \"prescribedBy\": \"Dr. Sarah Chen\",\n  \"startDate\": \"2026-07-01\",\n  \"category\": \"Diabetics\",\n  \"instructions\": \"Take with food\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/medication", "host": ["{{baseUrl}}"], "path": ["medication"] }
+          }
+        },
+        {
+          "name": "Update Medication",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"instructions\": \"Take in the morning\"\n}" },
+            "url": { "raw": "{{baseUrl}}/medication/{{medicationId}}", "host": ["{{baseUrl}}"], "path": ["medication", "{{medicationId}}"] }
+          }
+        },
+        {
+          "name": "Delete Medication",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/medication/{{medicationId}}", "host": ["{{baseUrl}}"], "path": ["medication", "{{medicationId}}"] } }
+        }
+      ]
+    },
+    {
+      "name": "Dose / Home / Today (Patient)",
+      "item": [
+        {
+          "name": "Home Summary",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/dose/home", "host": ["{{baseUrl}}"], "path": ["dose", "home"] } }
+        },
+        {
+          "name": "Today Schedule",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/dose/today", "host": ["{{baseUrl}}"], "path": ["dose", "today"] } }
+        },
+        {
+          "name": "Take Dose",
+          "request": { "method": "PATCH", "url": { "raw": "{{baseUrl}}/dose/{{doseId}}/take", "host": ["{{baseUrl}}"], "path": ["dose", "{{doseId}}", "take"] } }
+        },
+        {
+          "name": "Skip Dose",
+          "request": { "method": "PATCH", "url": { "raw": "{{baseUrl}}/dose/{{doseId}}/skip", "host": ["{{baseUrl}}"], "path": ["dose", "{{doseId}}", "skip"] } }
+        }
+      ]
+    },
+    {
+      "name": "Interaction Checker",
+      "item": [
+        {
+          "name": "Check My Interactions (Patient)",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/interaction/check", "host": ["{{baseUrl}}"], "path": ["interaction", "check"] } }
+        },
+        {
+          "name": "Get All Interactions (Admin)",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/interaction?severity=&search=", "host": ["{{baseUrl}}"], "path": ["interaction"], "query": [{ "key": "severity", "value": "" }, { "key": "search", "value": "" }] } }
+        },
+        {
+          "name": "Create Interaction (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"drugA\": \"Warfarin\",\n  \"drugB\": \"Aspirin\",\n  \"severity\": \"high\",\n  \"effect\": \"Significantly increases bleeding risk due to additive anticoagulant effects.\",\n  \"recommendation\": \"Avoid combination. If unavoidable, monitor INR closely and watch for signs of bleeding.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/interaction", "host": ["{{baseUrl}}"], "path": ["interaction"] }
+          }
+        },
+        {
+          "name": "Update Interaction (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"severity\": \"moderate\"\n}" },
+            "url": { "raw": "{{baseUrl}}/interaction/{{interactionId}}", "host": ["{{baseUrl}}"], "path": ["interaction", "{{interactionId}}"] }
+          }
+        },
+        {
+          "name": "Delete Interaction (Admin)",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/interaction/{{interactionId}}", "host": ["{{baseUrl}}"], "path": ["interaction", "{{interactionId}}"] } }
+        }
+      ]
+    },
+    {
+      "name": "Caregiver (Patient side - My Caregivers)",
+      "item": [
+        {
+          "name": "Get My Caregivers",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/caregiver/my-caregivers", "host": ["{{baseUrl}}"], "path": ["caregiver", "my-caregivers"] } }
+        },
+        {
+          "name": "Add Caregiver",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Harah Lhen\",\n  \"phoneNumber\": \"+13562344546\",\n  \"email\": \"hl@gmail.com\",\n  \"relationship\": \"Nurse\"\n}" },
+            "url": { "raw": "{{baseUrl}}/caregiver/my-caregivers", "host": ["{{baseUrl}}"], "path": ["caregiver", "my-caregivers"] }
+          }
+        },
+        {
+          "name": "Update Caregiver Notify Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"notifyOnTaken\": false,\n  \"notifyOnMissed\": true,\n  \"notifyOnSkipped\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/caregiver/my-caregivers/{{caregiverLinkId}}/notify-settings", "host": ["{{baseUrl}}"], "path": ["caregiver", "my-caregivers", "{{caregiverLinkId}}", "notify-settings"] }
+          }
+        },
+        {
+          "name": "Remove Caregiver",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/caregiver/my-caregivers/{{caregiverLinkId}}", "host": ["{{baseUrl}}"], "path": ["caregiver", "my-caregivers", "{{caregiverLinkId}}"] } }
+        }
+      ]
+    },
+    {
+      "name": "Caregiver (Caregiver side - My Patients)",
+      "item": [
+        {
+          "name": "Caregiver Home",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/caregiver/home", "host": ["{{baseUrl}}"], "path": ["caregiver", "home"] } }
+        },
+        {
+          "name": "Get My Patients",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/caregiver/my-patients?search=", "host": ["{{baseUrl}}"], "path": ["caregiver", "my-patients"], "query": [{ "key": "search", "value": "" }] } }
+        },
+        {
+          "name": "Get Patient Detail",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/caregiver/my-patients/{{caregiverLinkId}}", "host": ["{{baseUrl}}"], "path": ["caregiver", "my-patients", "{{caregiverLinkId}}"] } }
+        },
+        {
+          "name": "Adherence Overview",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/caregiver/adherence", "host": ["{{baseUrl}}"], "path": ["caregiver", "adherence"] } }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get Notifications",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/notification?type=All", "host": ["{{baseUrl}}"], "path": ["notification"], "query": [{ "key": "type", "value": "All" }] } }
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": { "method": "PATCH", "url": { "raw": "{{baseUrl}}/notification/{{notificationId}}/read", "host": ["{{baseUrl}}"], "path": ["notification", "{{notificationId}}", "read"] } }
+        },
+        {
+          "name": "Mark All Notifications Read",
+          "request": { "method": "PATCH", "url": { "raw": "{{baseUrl}}/notification/read-all", "host": ["{{baseUrl}}"], "path": ["notification", "read-all"] } }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Dashboard Stats",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/admin/dashboard", "host": ["{{baseUrl}}"], "path": ["admin", "dashboard"] } }
+        },
+        {
+          "name": "Get All Users",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/admin/users?page=1&limit=9", "host": ["{{baseUrl}}"], "path": ["admin", "users"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "9" }] } }
+        },
+        {
+          "name": "Get User By Id",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/admin/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{userId}}"] } }
+        },
+        {
+          "name": "Toggle User Status",
+          "request": { "method": "PATCH", "url": { "raw": "{{baseUrl}}/admin/users/{{userId}}/toggle-status", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{userId}}", "toggle-status"] } }
+        },
+        {
+          "name": "Delete User",
+          "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/admin/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["admin", "users", "{{userId}}"] } }
+        }
+      ]
+    }
+  ]
+}

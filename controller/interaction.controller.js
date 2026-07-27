@@ -5,8 +5,6 @@ import sendResponse from "../utils/sendResponse.js";
 import Interaction from "../model/interaction.model.js";
 import Medication from "../model/medication.model.js";
 
-// Screen: Interaction Checker (patient) - checks all of the patient's current
-// medications against the master Interaction reference list.
 export const checkMyInteractions = catchAsync(async (req, res) => {
   const medications = await Medication.find({ user: req.user._id, isActive: true });
   const medicationNames = medications.map((m) => m.name.toLowerCase());
@@ -16,8 +14,7 @@ export const checkMyInteractions = catchAsync(async (req, res) => {
   const flagged = allInteractions.filter((i) => {
     const a = i.drugA.toLowerCase();
     const b = i.drugB.toLowerCase();
-    // match if either side of the pair matches one of the user's meds (drugB can be
-    // conditional e.g. "Warfarin (if prescribed)")
+
     const matchA = medicationNames.some((name) => a.includes(name) || name.includes(a));
     const matchB = medicationNames.some((name) => b.includes(name) || name.includes(b));
     return matchA || matchB;
@@ -40,9 +37,6 @@ export const checkMyInteractions = catchAsync(async (req, res) => {
   });
 });
 
-// ---------------- Admin: Drug Interaction Checker management ----------------
-
-// Screen: Admin -> Interactions (list all flagged interactions)
 export const getAllInteractions = catchAsync(async (req, res) => {
   const { severity, search } = req.query;
 
@@ -65,7 +59,6 @@ export const getAllInteractions = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Admin -> Interactions -> add new (create)
 export const createInteraction = catchAsync(async (req, res) => {
   const { drugA, drugB, severity, effect, recommendation, category } = req.body;
 
@@ -90,7 +83,6 @@ export const createInteraction = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Admin -> Interactions -> Edit Drug Interaction modal
 export const updateInteraction = catchAsync(async (req, res) => {
   const interaction = await Interaction.findById(req.params.id);
 
@@ -117,7 +109,6 @@ export const updateInteraction = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Admin -> Interactions -> Delete confirm modal
 export const deleteInteraction = catchAsync(async (req, res) => {
   const interaction = await Interaction.findByIdAndDelete(req.params.id);
 

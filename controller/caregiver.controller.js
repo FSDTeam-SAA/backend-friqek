@@ -9,9 +9,6 @@ import Dose from "../model/dose.model.js";
 import { getTodayKey } from "../utils/commonMethod.js";
 import { ensureTodayDoses, autoMarkMissed } from "../utils/doseHelper.js";
 
-// ---------------- Patient side: "My Caregivers" ----------------
-
-// Screen: My Caregivers (list)
 export const getMyCaregivers = catchAsync(async (req, res) => {
   const caregivers = await CaregiverLink.find({
     patient: req.user._id,
@@ -26,7 +23,6 @@ export const getMyCaregivers = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Add Caregiver (modal form)
 export const addCaregiver = catchAsync(async (req, res) => {
   const { fullName, phoneNumber, email, relationship } = req.body;
 
@@ -34,7 +30,6 @@ export const addCaregiver = catchAsync(async (req, res) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Full name, phone and relationship are required");
   }
 
-  // link to an existing caregiver account if the email matches one
   let caregiverUser = null;
   if (email) {
     caregiverUser = await User.findOne({ email: email.toLowerCase().trim(), role: "caregiver" });
@@ -57,7 +52,6 @@ export const addCaregiver = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: My Caregivers -> "Notify When" toggles (Medication taken/missed/skipped)
 export const updateCaregiverNotifySettings = catchAsync(async (req, res) => {
   const { notifyOnTaken, notifyOnMissed, notifyOnSkipped } = req.body;
 
@@ -81,7 +75,6 @@ export const updateCaregiverNotifySettings = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: My Caregivers -> trash icon
 export const removeCaregiver = catchAsync(async (req, res) => {
   const link = await CaregiverLink.findOneAndUpdate(
     { _id: req.params.id, patient: req.user._id },
@@ -101,7 +94,6 @@ export const removeCaregiver = catchAsync(async (req, res) => {
   });
 });
 
-// ---------------- Caregiver side: "My Patients" / Home / Adherence ----------------
 
 const buildPatientOverview = async (patientId) => {
   const dateKey = getTodayKey();
@@ -116,7 +108,6 @@ const buildPatientOverview = async (patientId) => {
   return { taken, missed, total: doses.length, weeklyAdherence };
 };
 
-// Screen: Caregiver Home - "5 Monitored / 1 On Track / 2 Missed" + patient list
 export const getCaregiverHome = catchAsync(async (req, res) => {
   const links = await CaregiverLink.find({ caregiver: req.user._id, status: "active" }).populate(
     "patient",
@@ -156,7 +147,6 @@ export const getCaregiverHome = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: All Patients (caregiver "Patients" tab, with search)
 export const getMyPatients = catchAsync(async (req, res) => {
   const { search } = req.query;
 
@@ -187,7 +177,6 @@ export const getMyPatients = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Missed Medications Today (patient detail view for a caregiver)
 export const getPatientDetail = catchAsync(async (req, res) => {
   const link = await CaregiverLink.findOne({
     _id: req.params.linkId,
@@ -228,7 +217,6 @@ export const getPatientDetail = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Adherence tab (caregiver) - overall + per patient
 export const getAdherenceOverview = catchAsync(async (req, res) => {
   const links = await CaregiverLink.find({ caregiver: req.user._id, status: "active" }).populate(
     "patient",

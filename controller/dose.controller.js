@@ -37,7 +37,6 @@ const buildSchedule = async (userId, dateKey) => {
   };
 };
 
-// Screen: Home (patient) - "Today's Adherence" card + Active Meds / Missed / Upcoming + Today's Schedule
 export const getHomeSummary = catchAsync(async (req, res) => {
   const dateKey = getTodayKey();
   await ensureTodayDoses(req.user._id, dateKey);
@@ -61,7 +60,6 @@ export const getHomeSummary = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Today tab - full schedule + "3/6 doses completed today"
 export const getTodaySchedule = catchAsync(async (req, res) => {
   const dateKey = req.query.date || getTodayKey();
   await ensureTodayDoses(req.user._id, dateKey);
@@ -69,7 +67,6 @@ export const getTodaySchedule = catchAsync(async (req, res) => {
 
   const { grouped, summary, doses } = await buildSchedule(req.user._id, dateKey);
 
-  // "Missed" highlight card at the top of the Today screen (first missed dose, if any)
   const highlightedMissed = doses.find((d) => d.status === "missed") || null;
 
   sendResponse(res, {
@@ -115,7 +112,7 @@ const notifyCaregivers = async (patient, dose, type) => {
   );
 };
 
-// Screen: Home / Today - "Take" button
+
 export const takeDose = catchAsync(async (req, res) => {
   const dose = await Dose.findOne({ _id: req.params.doseId, user: req.user._id }).populate(
     "medication",
@@ -140,7 +137,6 @@ export const takeDose = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Home / Today - "Skip" button
 export const skipDose = catchAsync(async (req, res) => {
   const dose = await Dose.findOne({ _id: req.params.doseId, user: req.user._id }).populate(
     "medication",

@@ -35,7 +35,6 @@ export const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-// role === "patient"
 export const isPatient = catchAsync(async (req, res, next) => {
   if (req.user?.role !== "patient") {
     throw new AppError(httpStatus.FORBIDDEN, "Access denied. Patient only.");
@@ -43,7 +42,6 @@ export const isPatient = catchAsync(async (req, res, next) => {
   next();
 });
 
-// role === "caregiver"
 export const isCaregiver = catchAsync(async (req, res, next) => {
   if (req.user?.role !== "caregiver") {
     throw new AppError(httpStatus.FORBIDDEN, "Access denied. Caregiver only.");
@@ -51,7 +49,6 @@ export const isCaregiver = catchAsync(async (req, res, next) => {
   next();
 });
 
-// role === "admin"  (web admin dashboard)
 export const isAdmin = catchAsync(async (req, res, next) => {
   if (req.user?.role !== "admin") {
     throw new AppError(httpStatus.FORBIDDEN, "Access denied. Admin only.");

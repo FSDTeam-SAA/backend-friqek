@@ -7,7 +7,7 @@ import { createToken } from "../utils/authToken.js";
 import { generateOTP } from "../utils/commonMethod.js";
 import { sendEmail } from "../utils/sendEmail.js";
 
-// Screens: Sign up -> Enter OTP -> Choose your role
+
 export const register = catchAsync(async (req, res) => {
   const { name, email, password, confirmPassword, phoneNumber, role } =
     req.body;
@@ -30,7 +30,7 @@ export const register = catchAsync(async (req, res) => {
     email: email.toLowerCase().trim(),
     password,
     phoneNumber,
-    role: ["patient", "caregiver"].includes(role) ? role : "patient", // Choose your role screen
+    role: ["patient", "caregiver"].includes(role) ? role : "patient", 
   });
 
   const otp = generateOTP();
@@ -47,12 +47,11 @@ export const register = catchAsync(async (req, res) => {
     data: {
       email: user.email,
       role: user.role,
-      otp, // dev only, remove in production
+      otp, 
     },
   });
 });
 
-// Screen: Enter OTP (Sign up flow)
 export const verifyEmail = catchAsync(async (req, res) => {
   const { email, otp } = req.body;
 
@@ -105,11 +104,11 @@ export const resendOtp = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "OTP resent successfully",
-    data: { email: user.email, otp }, // dev only
+    data: { email: user.email, otp }, 
   });
 });
 
-// Screen: Sign in
+
 export const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
@@ -164,7 +163,7 @@ export const login = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Forgot password (email step)
+
 export const forgetPassword = catchAsync(async (req, res) => {
   const { email } = req.body;
 
@@ -189,11 +188,10 @@ export const forgetPassword = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "OTP sent",
-    data: { email: user.email, otp }, // dev only
+    data: { email: user.email, otp }, 
   });
 });
 
-// Screen: Enter OTP (Forgot password flow)
 export const verifyResetPasswordOTP = catchAsync(async (req, res) => {
   const { email, otp } = req.body;
 
@@ -219,7 +217,6 @@ export const verifyResetPasswordOTP = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Reset New password
 export const resetPassword = catchAsync(async (req, res) => {
   const { email, otp, password, confirmPassword } = req.body;
 
@@ -255,7 +252,6 @@ export const resetPassword = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Log out (confirmation modal)
 export const logout = catchAsync(async (req, res) => {
   const userId = req.user?._id;
 

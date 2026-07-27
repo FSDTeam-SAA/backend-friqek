@@ -7,7 +7,6 @@ import Medication from "../model/medication.model.js";
 import Dose from "../model/dose.model.js";
 import { getTodayKey } from "../utils/commonMethod.js";
 
-// Screen: Admin Dashboard (top stat cards + Adherence bar chart + User Growth chart)
 export const getDashboardStats = catchAsync(async (req, res) => {
   const totalUsers = await User.countDocuments({ role: { $ne: "admin" } });
   const activePatients = await User.countDocuments({ role: "patient", isBlocked: false });
@@ -18,7 +17,7 @@ export const getDashboardStats = catchAsync(async (req, res) => {
   const taken = todayDoses.filter((d) => d.status === "taken").length;
   const avgAdherence = todayDoses.length ? Math.round((taken / todayDoses.length) * 100) : 0;
 
-  // Adherence bar chart - last 7 days
+
   const adherenceByDay = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date();
@@ -32,7 +31,6 @@ export const getDashboardStats = catchAsync(async (req, res) => {
     });
   }
 
-  // User growth - last 12 months
   const userGrowth = [];
   for (let i = 11; i >= 0; i--) {
     const d = new Date();
@@ -58,7 +56,6 @@ export const getDashboardStats = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: All Users (table with pagination)
 export const getAllUsers = catchAsync(async (req, res) => {
   const { page = 1, limit = 9, role, status, search } = req.query;
 
@@ -83,7 +80,6 @@ export const getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: All Users -> "eye" icon (User Profile modal)
 export const getUserById = catchAsync(async (req, res) => {
   const user = await User.findById(req.params.id);
 
@@ -107,7 +103,6 @@ export const getUserById = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: All Users -> "check" icon (activate / toggle active-inactive)
 export const toggleUserStatus = catchAsync(async (req, res) => {
   const user = await User.findById(req.params.id);
 
@@ -126,7 +121,6 @@ export const toggleUserStatus = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: All Users -> "trash" icon (Confirm Action -> Delete)
 export const deleteUser = catchAsync(async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id);
 

@@ -6,7 +6,6 @@ import Medication from "../model/medication.model.js";
 import Dose from "../model/dose.model.js";
 import { ensureTodayDoses } from "../utils/doseHelper.js";
 
-// Screen: My Medications (list, with search)
 export const getMyMedications = catchAsync(async (req, res) => {
   const { search } = req.query;
 
@@ -41,7 +40,6 @@ export const getMedicationById = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: Add Medication (modal form: name, dosage, frequency, time(s), prescribedBy, startDate, category, instructions)
 export const addMedication = catchAsync(async (req, res) => {
   const {
     name,
@@ -77,7 +75,6 @@ export const addMedication = catchAsync(async (req, res) => {
     instructions,
   });
 
-  // generate today's dose entries right away so it shows up in Today's Schedule
   await ensureTodayDoses(req.user._id);
 
   sendResponse(res, {
@@ -88,7 +85,6 @@ export const addMedication = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: My Medications -> Edit button
 export const updateMedication = catchAsync(async (req, res) => {
   const medication = await Medication.findOne({ _id: req.params.id, user: req.user._id });
 
@@ -132,7 +128,6 @@ export const updateMedication = catchAsync(async (req, res) => {
   });
 });
 
-// Screen: My Medications -> Remove button
 export const deleteMedication = catchAsync(async (req, res) => {
   const medication = await Medication.findOneAndDelete({
     _id: req.params.id,

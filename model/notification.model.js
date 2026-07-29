@@ -21,7 +21,7 @@ const notificationSchema = new Schema(
 
     type: {
       type: String,
-      enum: ["taken", "missed", "skipped"],
+      enum: ["taken", "missed", "skipped", "reminder"],
       required: true,
     },
 

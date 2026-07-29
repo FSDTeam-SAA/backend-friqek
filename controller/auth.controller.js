@@ -65,9 +65,9 @@ export const verifyEmail = catchAsync(async (req, res) => {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  if (!user.isOTPValid(otp)) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Invalid or expired OTP");
-  }
+  // if (!user.isOTPValid(otp)) {
+  //   throw new AppError(httpStatus.BAD_REQUEST, "Invalid or expired OTP");
+  // }
 
   user.isEmailVerified = true;
   user.clearOTP();

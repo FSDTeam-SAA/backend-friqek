@@ -91,7 +91,7 @@ export const ensureTodayDoses = async (userId, dateKey = getTodayKey()) => {
             status: "pending",
           },
         },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: "after", }
       );
     }
   }

@@ -79,7 +79,7 @@ export const removeCaregiver = catchAsync(async (req, res) => {
   const link = await CaregiverLink.findOneAndUpdate(
     { _id: req.params.id, patient: req.user._id },
     { status: "removed" },
-    { new: true }
+    { returnDocument: "after",}
   );
 
   if (!link) {

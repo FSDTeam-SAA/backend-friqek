@@ -108,6 +108,68 @@ export const resendOtp = catchAsync(async (req, res) => {
   });
 });
 
+export const refreshToken = catchAsync(async (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Refresh token is required"
+    );
+  }
+
+  let decoded;
+
+  try {
+    decoded = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET
+    );
+  } catch (error) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "Invalid or expired refresh token"
+    );
+  }
+
+  const user = await User.findById(decoded._id);
+
+  if (!user) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "User not found"
+    );
+  }
+
+  if (user.refreshToken !== refreshToken) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "Invalid refresh token"
+    );
+  }
+
+  const payload = {
+    _id: user._id,
+    email: user.email,
+    role: user.role,
+  };
+
+  const newAccessToken = createToken(
+    payload,
+    process.env.JWT_ACCESS_SECRET,
+    "1d"
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Access token generated successfully",
+    data: {
+      accessToken: newAccessToken,
+    },
+  });
+});
+
 
 export const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;

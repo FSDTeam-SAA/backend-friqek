@@ -7,6 +7,7 @@ import {
   forgetPassword,
   verifyResetPasswordOTP,
   resetPassword,
+  refreshToken,
   logout,
 } from "../controller/auth.controller.js";
 import { protect } from "../middleware/auth.middleware.js";
@@ -20,6 +21,8 @@ router.post("/login", login);
 router.post("/forget-password", forgetPassword);
 router.post("/verify-reset-otp", verifyResetPasswordOTP);
 router.post("/reset-password", resetPassword);
+router.post("/refresh-token", refreshToken);
 router.post("/logout", protect, logout);
+
 
 export default router;

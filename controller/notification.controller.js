@@ -4,8 +4,9 @@ import catchAsync from "../utils/catchAsync.js";
 import sendResponse from "../utils/sendResponse.js";
 import Notification from "../model/notification.model.js";
 
+// Screen: Notifications / Alerts (caregiver) - filter tabs All / Taken / Missed / Skipped
 export const getNotifications = catchAsync(async (req, res) => {
-  const { type } = req.query; 
+  const { type } = req.query; // "All" | "Taken" | "Missed" | "Skipped"
 
   const filter = { recipient: req.user._id };
   if (type && type !== "All") filter.type = type.toLowerCase();
@@ -25,11 +26,12 @@ export const getNotifications = catchAsync(async (req, res) => {
   });
 });
 
+// Screen: bell icon -> mark as read
 export const markNotificationRead = catchAsync(async (req, res) => {
   const notification = await Notification.findOneAndUpdate(
     { _id: req.params.id, recipient: req.user._id },
     { isRead: true },
-    { returnDocument: "after", }
+    { new: true }
   );
 
   if (!notification) {

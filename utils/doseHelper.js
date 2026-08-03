@@ -1,6 +1,9 @@
+
+
 // import Dose from "../model/dose.model.js";
 // import Medication from "../model/medication.model.js";
 // import { getTodayKey } from "./commonMethod.js";
+// import { notifyCaregivers } from "./notifyHelper.js";
 
 // // Morning: 04:00-11:59, Afternoon: 12:00-17:59, Night: 18:00-03:59
 // export const getSlotFromTime = (time) => {
@@ -31,18 +34,22 @@
 //             status: "pending",
 //           },
 //         },
-//         { upsert: true, new: true }
+//         { upsert: true, returnDocument: "after", }
 //       );
 //     }
 //   }
 // };
 
 // // Auto-mark doses whose scheduled time has passed by more than 1 hour as "missed"
+// // and notify any linked caregivers who have "notify on missed" turned on.
 // export const autoMarkMissed = async (userId, dateKey = getTodayKey()) => {
 //   if (dateKey !== getTodayKey()) return; // only relevant for today
 
 //   const now = new Date();
-//   const doses = await Dose.find({ user: userId, dateKey, status: "pending" });
+//   const doses = await Dose.find({ user: userId, dateKey, status: "pending" }).populate(
+//     "medication",
+//     "name dosage"
+//   );
 
 //   for (const dose of doses) {
 //     const [h, m] = dose.scheduledTime.split(":").map(Number);
@@ -52,6 +59,7 @@
 //     if (now.getTime() - scheduled.getTime() > 60 * 60 * 1000) {
 //       dose.status = "missed";
 //       await dose.save();
+//       await notifyCaregivers(userId, dose, "missed");
 //     }
 //   }
 // };
@@ -91,7 +99,7 @@ export const ensureTodayDoses = async (userId, dateKey = getTodayKey()) => {
             status: "pending",
           },
         },
-        { upsert: true, returnDocument: "after", }
+        { upsert: true, new: true }
       );
     }
   }

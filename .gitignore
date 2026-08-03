@@ -1,3 +1,4 @@
 node_modules/
 public/temp/*
 !public/temp/.gitkeep
+config.bat
